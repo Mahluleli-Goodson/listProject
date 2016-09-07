@@ -1,97 +1,30 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator } from 'react-native';
+import AllArtists from './allArtistsComponent';
+import ArtistProfile from './artistProfileComponent';
 
 class listProject extends Component {
-  // Initialize the hardcoded data
-  constructor(props) {
-    super(props);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {
-      loader:'LOADING...',
-      name:'',
-      dataSource: ds.cloneWithRows([''])
-    };
 
-    this.loadArtists();
-  };
-
-  /*function to display name of selected artist*/
-  sayMyName(text){
-    /*console.log(text);*/
-    this.setState({
-      name:text
-    });
-  };
-  /*END function to display name of selected artist*/
-
-  /*function to fetch artists*/
-  loadArtists(){
-    fetch('http://ws.audioscrobbler.com/2.0/?method=tag.gettopartists&tag=pop&api_key=57ee3318536b23ee81d6b27e36997cde&format=json')
-        .then(function (response) {
-          return response.json();
-        })
-        .then(function (respJSON) {
-          var jsonOBJ = respJSON.topartists.artist;
-          const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-          this.setState({
-            dataSource:ds.cloneWithRows(jsonOBJ),
-            loader:''
-          });
-          console.log(jsonOBJ);
-          }.bind(this))
-        .catch(function (error) {
-          console.log(error);
-        });
-    /*var customData = require('./students.json'); //require local JSON
-    console.log(customData);*/
-  };
-  /*END function to fetch artists*/
+    renderScene(route,navigator){
+        if(route.title=='Top POP Artists'){
+            return <AllArtists title={route.title} navigator={navigator}/>
+        }else{
+            return <ArtistProfile name={route.title} navigator={navigator}/>
+        }
+    }
 
   render() {
-    return (
-        <View style={{flex:1}}>
-          <ToolbarAndroid style={styles.toolBar}><Text style={{color:'#fff'}}>Top POP Artists</Text></ToolbarAndroid>
-          <Text style={styles.loaderGIF}>{this.state.loader}</Text>
-          <ListView
-              dataSource={this.state.dataSource}
-              renderRow={(rowData) =>
-              <TouchableHighlight onPress={()=>this.sayMyName(rowData.name)}>
-               <Text style={styles.singleList}>{rowData.name}</Text>
-              </TouchableHighlight>
-               }
-          />
-          <View style={styles.outputText}><Text style={{fontSize:15,color:'#113'}}>{this.state.name}</Text></View>
-        </View>
-    );
+     return (
+         <Navigator
+             initialRoute={{ title: 'Top POP Artists'}}
+             renderScene={this.renderScene.bind(this)}
+             configureScene={(route, routeStack) =>
+              Navigator.SceneConfigs.FloatFromBottomAndroid}
+         />
+     )
+
   }
 }
-
-const styles = StyleSheet.create({
-  singleList:{
-    backgroundColor:'#ff9800',
-    textAlign:'center',
-    marginTop:2,
-    padding:10,
-    fontSize:20,
-    elevation:2
-  },
-  toolBar:{
-    padding:10,
-    backgroundColor:'#133',
-    elevation:5
-  },
-  outputText:{
-    padding:6,
-    borderStyle:'solid',
-    borderTopColor:'red',
-    borderTopWidth:2
-  },
-  loaderGIF:{
-    fontSize:20,
-    textAlign:'center',
-    color:'#CB1B0E'
-  }
-});
 
 // App registration and rendering
 AppRegistry.registerComponent('listProject', () => listProject);
