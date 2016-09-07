@@ -1,0 +1,83 @@
+<html>
+<head>
+    <!--<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>-->
+</head>
+<body>
+<script>
+   /* function appendChildren() {
+        var allDivs = document.getElementsByTagName("div");
+        allDivs = [].slice.call(allDivs, 0);
+        for (var i = 0; i < allDivs.length; i++) {
+            var newDiv = document.createElement("div");
+            decorateDiv(newDiv);
+            allDivs[i].appendChild(newDiv);
+
+            console.log(allDivs.length);
+        }
+    }
+
+    // Mock of decorateDiv function for testing purposes
+    function decorateDiv(div) {}
+    setTimeout(appendChildren,2000);*/
+
+    /*function removeProperty(obj, prop) {
+        if(obj.hasOwnProperty(prop)){
+            delete obj[prop];
+            return true;
+        }else{
+            return false;
+        }
+    }*/
+
+    /*function formatDate(userDate) {
+        var parts =userDate.split('/');
+        return (parts[2].toString()+parts[1].toString()+parts[0].toString());
+    }*/
+
+    /*function ensure(value) {
+        if(typeof value !== "undefined"){
+            return value;
+        }else{
+            throw "ERROR";
+        }
+    }
+
+    console.log(formatDate("12/31/2014"));*/
+   /*$( document ).ready(function(){
+       $('#clickme').click(function() {
+           var e = this.innerHTML;
+           setTimeout(function() {
+               alert(e);
+           }, 200);
+       });
+   });*/
+
+   function registerHandlers() {
+       var as = document.getElementsByTagName('a');
+       console.log(as);
+       for (var i = 0; i < as.length; i++) {
+           var as2 = document.getElementsByTagName('a')[i];
+           var att = document.createAttribute("data-index");
+           att.value = i;
+           as2.setAttributeNode(att);
+           as[i].onclick = function() {
+              var eee =  this.getAttribute("data-index");
+               alert(eee);
+               return false;
+           }
+       }
+   }
+   setTimeout(registerHandlers,2000);
+</script>
+
+<div id="a">
+    <div id="b"></div>
+   <!-- <a id="clickme" href="#">click</a>-->
+
+    <a href="//www.yahoo.com">Yahoo!</a><br/>
+    <a href="//www.altavista.com">AltaVista</a><br/>
+    <a href="//www.google.com">Google</a><br/>
+</div>
+
+</body>
+</html>
