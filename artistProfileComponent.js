@@ -2,6 +2,30 @@ import React, { Component } from 'react';
 import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Image,Linking } from 'react-native';
 
 export default class artistProfileComponent extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+          artist_bio:'loading, wait...'
+        };
+        this.getArtistInfo();
+    }
+
+    getArtistInfo(){
+        var artistName = encodeURIComponent(this.props.name);
+        fetch('http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist='+artistName+'&api_key=57ee3318536b23ee81d6b27e36997cde&format=json').
+            then(function (response) {
+                return response.json();
+            }).
+            then(function (respObj) {
+            this.setState({
+                artist_bio:respObj.artist.bio.content
+            });
+            console.log(respObj);
+            }.bind(this)).
+            catch(function (error) {
+            console.error(error);
+            });
+    };
 
     goHome(){
         this.props.navigator.pop();
@@ -28,18 +52,21 @@ export default class artistProfileComponent extends Component {
               </View>{/*end of top toolbar*/}
 
               {/*main view section*/}
-              <ScrollView style={{minHeight:100}}>
+              <ScrollView>
                   <View style={styles.profileCard}>
                       <Image source={artist_clip} style={styles.imageHolder}/>
                       <Text style={styles.imgTitle}>{this.props.name}</Text>
-                      <Text style={styles.profilePara}>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus asperiores corporis
-                          deserunt dignissimos distinctio dolores, ducimus ea excepturi, fuga iste magnam nam neque
-                          nobis, pariatur quibusdam repellat totam velit veniam.
-                      </Text>
+                      <View style={styles.profileParaContainer}>
+                          <Text style={styles.profilePara}>
+                              {this.state.artist_bio}
+                          </Text>
+                      </View>
+                      <View>
+                          <Text>Similar Artists:</Text>
+                      </View>
                   </View>
               </ScrollView>
-              <Text style={styles.anchors} onPress={() => Linking.openURL('http://www.theriket.com/#/')}>Powered By TheRiket</Text>
+              {/*<Text style={styles.anchors} onPress={() => Linking.openURL('http://www.theriket.com/#/')}>Powered By TheRiket</Text>*/}
           </View>
         )
 
@@ -82,14 +109,25 @@ const styles = StyleSheet.create({
         marginTop:7,
         marginLeft:10,
         marginRight:10,
+        marginBottom:7,
         padding:10,
         elevation:2,
         borderRadius:3
     },
+    profileParaContainer:{
+        borderTopColor:'#133',
+        borderTopWidth:1,
+        borderBottomColor:'#133',
+        borderBottomWidth:1,
+        borderStyle:'solid',
+        paddingTop:10,
+        marginBottom:10
+    },
     profilePara:{
-        backgroundColor:'#ff4',
+        /*backgroundColor:'#ff4',*/
         textAlign:'justify',
-        fontSize:17
+        fontSize:17,
+        lineHeight:25
     },
     anchors:{
         color:'#133',

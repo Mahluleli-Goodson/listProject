@@ -43,7 +43,7 @@ export default class allArtistsComponent extends Component {
                     dataSource:ds.cloneWithRows(jsonOBJ),
                     loader:''
                 });
-                console.log(jsonOBJ);
+                /*console.log(jsonOBJ);*/
             }.bind(this))
             .catch(function (error) {
                 console.log(error);
