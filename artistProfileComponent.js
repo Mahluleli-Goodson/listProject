@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Image } from 'react-native';
 
 export default class artistProfileComponent extends Component {
 
-    goHome(val){
+    goHome(){
         this.props.navigator.pop();
     }
 
     render() {
+        let artist_clip = {
+            uri:this.props.art_img
+        };
+        console.log(this.props.art_img);
         return (
           <View>
               <View style={{padding:7,backgroundColor:'#133',elevation:5,flexDirection: 'row',justifyContent: 'space-between'}}>
@@ -16,14 +20,18 @@ export default class artistProfileComponent extends Component {
                       <Text style={styles.titleTxt}>{this.props.name}</Text>
                   </View>
                   <View style={styles.doneBtn}>
-                      <TouchableHighlight  onPress={this.goHome.bind(this,'Top POP Artists')}>
+                      <TouchableHighlight  onPress={this.goHome.bind(this)}>
                           <Text style={styles.doneTxt}>Done</Text>
                       </TouchableHighlight>
                   </View>
 
-              </View>
+              </View>{/*end of top toolbar*/}
 
-              <Text>{this.props.name}</Text>
+              {/*main view section*/}
+              <ScrollView>
+                  <Image source={artist_clip} style={styles.imageHolder}/>
+                  <Text style={styles.imgTitle}>{this.props.name}</Text>
+              </ScrollView>
           </View>
         )
 
@@ -46,5 +54,16 @@ const styles = StyleSheet.create({
         paddingLeft:5,
         paddingBottom:5,
         fontSize:22
+    },
+    imageHolder:{
+        width: 300,
+        height: 300,
+        alignSelf:'center',
+        marginTop:30
+    },
+    imgTitle:{
+        alignSelf:'center',
+        fontSize:19,
+        fontWeight:'bold'
     }
 });

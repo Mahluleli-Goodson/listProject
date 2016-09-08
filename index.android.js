@@ -9,7 +9,7 @@ class listProject extends Component {
         if(route.title=='Top POP Artists'){
             return <AllArtists title={route.title} navigator={navigator}/>
         }else{
-            return <ArtistProfile name={route.title} navigator={navigator}/>
+            return <ArtistProfile name={route.title} art_img={route.art_img}  navigator={navigator}/>
         }
     }
 
