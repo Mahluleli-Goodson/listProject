@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Image } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Image,Linking } from 'react-native';
 
 export default class artistProfileComponent extends Component {
 
@@ -28,12 +28,18 @@ export default class artistProfileComponent extends Component {
               </View>{/*end of top toolbar*/}
 
               {/*main view section*/}
-              <ScrollView>
-                  <View>
+              <ScrollView style={{minHeight:100}}>
+                  <View style={styles.profileCard}>
                       <Image source={artist_clip} style={styles.imageHolder}/>
                       <Text style={styles.imgTitle}>{this.props.name}</Text>
+                      <Text style={styles.profilePara}>
+                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus asperiores corporis
+                          deserunt dignissimos distinctio dolores, ducimus ea excepturi, fuga iste magnam nam neque
+                          nobis, pariatur quibusdam repellat totam velit veniam.
+                      </Text>
                   </View>
               </ScrollView>
+              <Text style={styles.anchors} onPress={() => Linking.openURL('http://www.theriket.com/#/')}>Powered By TheRiket</Text>
           </View>
         )
 
@@ -61,11 +67,34 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         alignSelf:'center',
-        marginTop:30
+        borderRadius:100,
+        borderColor:'#ff9800',
+        borderWidth:5
+        /*marginTop:30*/
     },
     imgTitle:{
         alignSelf:'center',
         fontSize:19,
         fontWeight:'bold'
+    },
+    profileCard:{
+        backgroundColor:'#fff',
+        marginTop:7,
+        marginLeft:10,
+        marginRight:10,
+        padding:10,
+        elevation:2,
+        borderRadius:3
+    },
+    profilePara:{
+        backgroundColor:'#ff4',
+        textAlign:'justify',
+        fontSize:17
+    },
+    anchors:{
+        color:'#133',
+        fontWeight:'100',
+        position:'relative',
+        bottom:0
     }
 });
