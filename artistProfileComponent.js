@@ -13,7 +13,7 @@ export default class artistProfileComponent extends Component {
         };
         console.log(this.props.art_img);
         return (
-          <View>
+          <View style={{flex:1, backgroundColor:'#eee'}}>
               <View style={{padding:7,backgroundColor:'#133',elevation:5,flexDirection: 'row',justifyContent: 'space-between'}}>
 
                   <View style={{}}>
@@ -29,8 +29,10 @@ export default class artistProfileComponent extends Component {
 
               {/*main view section*/}
               <ScrollView>
-                  <Image source={artist_clip} style={styles.imageHolder}/>
-                  <Text style={styles.imgTitle}>{this.props.name}</Text>
+                  <View>
+                      <Image source={artist_clip} style={styles.imageHolder}/>
+                      <Text style={styles.imgTitle}>{this.props.name}</Text>
+                  </View>
               </ScrollView>
           </View>
         )
@@ -56,8 +58,8 @@ const styles = StyleSheet.create({
         fontSize:22
     },
     imageHolder:{
-        width: 300,
-        height: 300,
+        width: 200,
+        height: 200,
         alignSelf:'center',
         marginTop:30
     },

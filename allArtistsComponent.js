@@ -55,7 +55,7 @@ export default class allArtistsComponent extends Component {
 
     render() {
         return (
-            <View style={{flex:1}}>
+            <View style={{flex:1, backgroundColor:'#eee'}}>
                 <ToolbarAndroid style={styles.toolBar}><Text style={{color:'#fff'}}>{this.state.title}</Text></ToolbarAndroid>
                 <Text style={styles.loaderGIF}>{this.state.loader}</Text>
                 <ListView
