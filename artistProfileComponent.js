@@ -37,10 +37,10 @@ export default class artistProfileComponent extends Component {
         };
         console.log(this.props.art_img);
         return (
-          <View style={{flex:1, backgroundColor:'#eee'}}>
+          <View style={styles.container}>
               <View style={{padding:7,backgroundColor:'#133',elevation:5,flexDirection: 'row',justifyContent: 'space-between'}}>
 
-                  <View style={{}}>
+                  <View>
                       <Text style={styles.titleTxt}>{this.props.name}</Text>
                   </View>
                   <View style={styles.doneBtn}>
@@ -74,6 +74,11 @@ export default class artistProfileComponent extends Component {
 }
 
 const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        width:null,
+        height:null
+    },
     doneBtn:{
        /* backgroundColor:'red',*/
         paddingTop:8,
@@ -105,12 +110,14 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     profileCard:{
-        backgroundColor:'#fff',
+        backgroundColor:'rgba(0,0,0,0.4)',
         marginTop:7,
         marginLeft:10,
         marginRight:10,
         marginBottom:7,
         padding:10,
+        width:null,
+        height:null,
         elevation:2,
         borderRadius:3
     },
