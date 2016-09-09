@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Image,Linking } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Linking } from 'react-native';
+import Image from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Bar';
 
 export default class artistProfileComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
-          artist_bio:'loading, wait...'
+          artist_bio:'loading, wait...',
+            artist_pic:require('./images.png')
         };
         this.getArtistInfo();
     }
@@ -32,10 +35,7 @@ export default class artistProfileComponent extends Component {
     }
 
     render() {
-        let artist_clip = {
-            uri:this.props.art_img
-        };
-        console.log(this.props.art_img);
+
         return (
           <View style={styles.container}>
               <View style={{padding:7,backgroundColor:'#133',elevation:5,flexDirection: 'row',justifyContent: 'space-between'}}>
@@ -55,7 +55,14 @@ export default class artistProfileComponent extends Component {
               <ScrollView style={{backgroundColor:'#ddd'}}>
                   <View style={styles.profileCard}>
                       <View style={styles.profileCardInner}>
-                          <Image source={artist_clip} style={styles.imageHolder}/>
+                          <Image
+                              source={{ uri: 'http://loremflickr.com/640/480/dog' }}
+                              indicator={ProgressBar}
+                              style={{
+                            width: 320,
+                            height: 240,
+                          }}
+                          />
                           <Text style={styles.imgTitle}>{this.props.name}</Text>
                           <View style={styles.profileParaContainer}>
                               <Text style={styles.profilePara}>
