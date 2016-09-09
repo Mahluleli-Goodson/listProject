@@ -7,8 +7,7 @@ export default class artistProfileComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
-          artist_bio:'loading, wait...',
-            artist_pic:require('./images.png')
+          artist_bio:'loading, wait...'
         };
         this.getArtistInfo();
     }
@@ -35,7 +34,10 @@ export default class artistProfileComponent extends Component {
     }
 
     render() {
-
+        let artist_clip = {
+            uri:this.props.art_img
+        };
+        console.log(this.props.art_img);
         return (
           <View style={styles.container}>
               <View style={{padding:7,backgroundColor:'#133',elevation:5,flexDirection: 'row',justifyContent: 'space-between'}}>
@@ -56,12 +58,10 @@ export default class artistProfileComponent extends Component {
                   <View style={styles.profileCard}>
                       <View style={styles.profileCardInner}>
                           <Image
-                              source={{ uri: 'http://loremflickr.com/640/480/dog' }}
+                              source={artist_clip}
                               indicator={ProgressBar}
-                              style={{
-                            width: 320,
-                            height: 240,
-                          }}
+                              indicatorProps={{color: '#133'}}
+                              style={styles.imageHolder}
                           />
                           <Text style={styles.imgTitle}>{this.props.name}</Text>
                           <View style={styles.profileParaContainer}>
