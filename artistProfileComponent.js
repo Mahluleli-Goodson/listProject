@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Linking } from 'react-native';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
+import * as Progress from 'react-native-progress';
 
 export default class artistProfileComponent extends Component {
     constructor(props){
@@ -37,7 +38,17 @@ export default class artistProfileComponent extends Component {
         let artist_clip = {
             uri:this.props.art_img
         };
+        let bio_area='';//initialise bio-content variable
         console.log(this.props.art_img);
+
+        //show gif loader while content-bio is still loading
+        if(this.state.artist_bio=='loading, wait...'){
+             bio_area= <Image source={require("./ripple.gif")} style={styles.gifLoader}/>;
+        }else{
+            bio_area = <Text style={styles.profilePara}>{this.state.artist_bio}</Text>
+        }
+
+
         return (
           <View style={styles.container}>
               <View style={{padding:7,backgroundColor:'#133',elevation:5,flexDirection: 'row',justifyContent: 'space-between'}}>
@@ -65,9 +76,7 @@ export default class artistProfileComponent extends Component {
                           />
                           <Text style={styles.imgTitle}>{this.props.name}</Text>
                           <View style={styles.profileParaContainer}>
-                              <Text style={styles.profilePara}>
-                                  {this.state.artist_bio}
-                              </Text>
+                              {bio_area}
                           </View>
                           <View>
                               <Text>Similar Artists:</Text>
@@ -150,5 +159,10 @@ const styles = StyleSheet.create({
         fontWeight:'100',
         position:'relative',
         bottom:0
+    },
+    gifLoader:{
+        width:40,
+        height:40,
+        alignSelf:'center'
     }
 });

@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Image } from 'react-native';
 
 export default class allArtistsComponent extends Component {
     // Initialize the hardcoded data
     constructor(props) {
         super(props);
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             loader:'LOADING...',
             name:'',
             title:this.props.title,/*or use props.title ---still in same scope*/
-            dataSource: ds.cloneWithRows([''])
+            dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows([''])
         };
 
         this.loadArtists();
@@ -20,8 +19,7 @@ export default class allArtistsComponent extends Component {
     sayMyName(text,img){
         /*console.log(text);*/
         this.setState({
-            name:text,
-            title:text
+            name:text
         });
         this.props.navigator.push({
             title:text,
@@ -38,9 +36,8 @@ export default class allArtistsComponent extends Component {
             })
             .then(function (respJSON) {
                 var jsonOBJ = respJSON.topartists.artist;
-                const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
                 this.setState({
-                    dataSource:ds.cloneWithRows(jsonOBJ),
+                    dataSource:new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(jsonOBJ),
                     loader:''
                 });
                 /*console.log(jsonOBJ);*/
@@ -54,18 +51,28 @@ export default class allArtistsComponent extends Component {
     /*END function to fetch artists*/
 
     render() {
-        return (
-            <View style={{flex:1, backgroundColor:'#eee'}}>
-                <ToolbarAndroid style={styles.toolBar}><Text style={{color:'#fff'}}>{this.state.title}</Text></ToolbarAndroid>
-                <Text style={styles.loaderGIF}>{this.state.loader}</Text>
+
+        let artist_list_area = '';
+
+        //show gif loader while artist-list is still loading
+        if(this.state.loader=='LOADING...'){
+            artist_list_area= <Image source={require("./ripple.gif")} style={styles.gifLoader}/>;
+        }else{
+            artist_list_area =
                 <ListView
-                    dataSource={this.state.dataSource}
-                    renderRow={(rowData) =>
+                dataSource={this.state.dataSource}
+                renderRow={(rowData) =>
               <TouchableHighlight onPress={()=>this.sayMyName(rowData.name,rowData.image[4]["#text"])}>
                <Text style={styles.singleList}>{rowData.name}</Text>
               </TouchableHighlight>
                }
-                />
+            />
+        }
+
+        return (
+            <View style={{flex:1, backgroundColor:'#eee'}}>
+                <ToolbarAndroid style={styles.toolBar}><Text style={{color:'#fff'}}>{this.state.title}</Text></ToolbarAndroid>
+                {artist_list_area}
                 {/*<View style={styles.outputText}><Text style={{fontSize:15,color:'#113'}}>{this.state.name}</Text></View>*/}
             </View>
         );
@@ -96,5 +103,11 @@ const styles = StyleSheet.create({
         fontSize:20,
         textAlign:'center',
         color:'#CB1B0E'
+    },
+    gifLoader:{
+        width:40,
+        height:40,
+        alignSelf:'center',
+        backgroundColor:'red'
     }
 });
