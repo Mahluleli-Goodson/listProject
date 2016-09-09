@@ -52,17 +52,19 @@ export default class artistProfileComponent extends Component {
               </View>{/*end of top toolbar*/}
 
               {/*main view section*/}
-              <ScrollView>
+              <ScrollView style={{backgroundColor:'#ddd'}}>
                   <View style={styles.profileCard}>
-                      <Image source={artist_clip} style={styles.imageHolder}/>
-                      <Text style={styles.imgTitle}>{this.props.name}</Text>
-                      <View style={styles.profileParaContainer}>
-                          <Text style={styles.profilePara}>
-                              {this.state.artist_bio}
-                          </Text>
-                      </View>
-                      <View>
-                          <Text>Similar Artists:</Text>
+                      <View style={styles.profileCardInner}>
+                          <Image source={artist_clip} style={styles.imageHolder}/>
+                          <Text style={styles.imgTitle}>{this.props.name}</Text>
+                          <View style={styles.profileParaContainer}>
+                              <Text style={styles.profilePara}>
+                                  {this.state.artist_bio}
+                              </Text>
+                          </View>
+                          <View>
+                              <Text>Similar Artists:</Text>
+                          </View>
                       </View>
                   </View>
               </ScrollView>
@@ -110,16 +112,16 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     profileCard:{
-        backgroundColor:'rgba(0,0,0,0.4)',
+        backgroundColor:'#fff',
         marginTop:7,
         marginLeft:10,
         marginRight:10,
         marginBottom:7,
-        padding:10,
-        width:null,
-        height:null,
-        elevation:2,
-        borderRadius:3
+        elevation:2
+    },
+    profileCardInner:{
+        backgroundColor:'#fff',
+        padding:10
     },
     profileParaContainer:{
         borderTopColor:'#133',
