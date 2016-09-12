@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Image } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight } from 'react-native';
+import Image from 'react-native-image-progress';
 
 export default class allArtistsComponent extends Component {
     // Initialize the hardcoded data
@@ -7,7 +8,6 @@ export default class allArtistsComponent extends Component {
         super(props);
         this.state = {
             loader:'LOADING...',
-            name:'',
             title:this.props.title,/*or use props.title ---still in same scope*/
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows([''])
         };
@@ -16,14 +16,9 @@ export default class allArtistsComponent extends Component {
     };
 
     /*function to display name of selected artist*/
-    sayMyName(text,img){
-        /*console.log(text);*/
-        this.setState({
-            name:text
-        });
+     sayMyName(text){
         this.props.navigator.push({
-            title:text,
-            art_img:img
+            title:text
         });
     };
     /*END function to display name of selected artist*/
@@ -56,24 +51,26 @@ export default class allArtistsComponent extends Component {
 
         //show gif loader while artist-list is still loading
         if(this.state.loader=='LOADING...'){
-            artist_list_area= <Image source={require("./ripple.gif")} style={styles.gifLoader}/>;
+            artist_list_area=
+                <View style={this.state.loader=='LOADING...'?styles.centerGif:''}>
+                    <Image source={require("./ripple.gif")}/>
+                </View>;
         }else{
             artist_list_area =
                 <ListView
                 dataSource={this.state.dataSource}
                 renderRow={(rowData) =>
-              <TouchableHighlight onPress={()=>this.sayMyName(rowData.name,rowData.image[4]["#text"])}>
+              <TouchableHighlight onPress={()=>this.sayMyName(rowData.name)}>
                <Text style={styles.singleList}>{rowData.name}</Text>
               </TouchableHighlight>
                }
-            />
+            />;
         }
 
         return (
             <View style={{flex:1, backgroundColor:'#eee'}}>
                 <ToolbarAndroid style={styles.toolBar}><Text style={{color:'#fff'}}>{this.state.title}</Text></ToolbarAndroid>
-                {artist_list_area}
-                {/*<View style={styles.outputText}><Text style={{fontSize:15,color:'#113'}}>{this.state.name}</Text></View>*/}
+                    {artist_list_area}
             </View>
         );
     }
@@ -104,10 +101,9 @@ const styles = StyleSheet.create({
         textAlign:'center',
         color:'#CB1B0E'
     },
-    gifLoader:{
-        width:40,
-        height:40,
-        alignSelf:'center',
-        backgroundColor:'red'
+    centerGif:{
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

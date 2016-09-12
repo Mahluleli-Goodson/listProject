@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Linking } from 'react-native';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
-import * as Progress from 'react-native-progress';
+import AllArtistsFunc from './allArtistsComponent';
 
 export default class artistProfileComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
-          artist_bio:'loading, wait...'
+            artist_bio:'loading, wait...',
+            art_img:'',
+            similarOBJ:['']
         };
         this.getArtistInfo();
     }
@@ -21,9 +23,12 @@ export default class artistProfileComponent extends Component {
             }).
             then(function (respObj) {
             this.setState({
-                artist_bio:respObj.artist.bio.content
+                artist_bio:respObj.artist.bio.content,
+                art_img:respObj.artist.image[4]["#text"],
+                similarOBJ:respObj.artist.similar.artist
             });
             console.log(respObj);
+            /*console.log('similar',respObj.artist.similar.artist);*/
             }.bind(this)).
             catch(function (error) {
             console.error(error);
@@ -32,14 +37,19 @@ export default class artistProfileComponent extends Component {
 
     goHome(){
         this.props.navigator.pop();
-    }
+    };
+    fetchArt(artVal){
+        this.props.navigator.push({
+            title:artVal
+        });
+        console.log(artVal);
+    };
 
     render() {
         let artist_clip = {
-            uri:this.props.art_img
+            uri:this.state.art_img
         };
         let bio_area='';//initialise bio-content variable
-        console.log(this.props.art_img);
 
         //show gif loader while content-bio is still loading
         if(this.state.artist_bio=='loading, wait...'){
@@ -47,7 +57,6 @@ export default class artistProfileComponent extends Component {
         }else{
             bio_area = <Text style={styles.profilePara}>{this.state.artist_bio}</Text>
         }
-
 
         return (
           <View style={styles.container}>
@@ -57,8 +66,8 @@ export default class artistProfileComponent extends Component {
                       <Text style={styles.titleTxt}>{this.props.name}</Text>
                   </View>
                   <View style={styles.doneBtn}>
-                      <TouchableHighlight  onPress={this.goHome.bind(this)}>
-                          <Text style={styles.doneTxt}>Done</Text>
+                      <TouchableHighlight  onPress={this.goHome.bind(this)} style={{borderRadius:20,borderStyle:'solid',borderWidth:1,borderColor:'#c5d8df'}}>
+                          <Text style={styles.doneTxt}>done</Text>
                       </TouchableHighlight>
                   </View>
 
@@ -79,7 +88,19 @@ export default class artistProfileComponent extends Component {
                               {bio_area}
                           </View>
                           <View>
-                              <Text>Similar Artists:</Text>
+                              <Text style={{fontSize:17}}>Similar Artists:</Text>
+                              <View>
+                                  {
+                                      this.state.similarOBJ.map(function (similar_art,index) {
+                                         return(
+                                             <TouchableHighlight onPress={()=>this.fetchArt(similar_art.name)} key={index} style={styles.listStyle}>
+                                                 <Text style={styles.similarList}>{similar_art.name}</Text>
+                                             </TouchableHighlight>
+                                         ) ;
+
+                                      }.bind(this))
+                                  }
+                              </View>
                           </View>
                       </View>
                   </View>
@@ -98,13 +119,14 @@ const styles = StyleSheet.create({
         height:null
     },
     doneBtn:{
-       /* backgroundColor:'red',*/
-        paddingTop:8,
+        /*backgroundColor:'red',*/
+        paddingTop:8
     },
     doneTxt:{
         width:40,
         color:'#ccc',
-        fontStyle:'italic'
+        fontStyle:'italic',
+        textAlign:'center'
 
     },
     titleTxt:{
@@ -152,7 +174,8 @@ const styles = StyleSheet.create({
         /*backgroundColor:'#ff4',*/
         textAlign:'justify',
         fontSize:17,
-        lineHeight:25
+        lineHeight:25,
+        color:'#000'
     },
     anchors:{
         color:'#133',
@@ -164,5 +187,18 @@ const styles = StyleSheet.create({
         width:40,
         height:40,
         alignSelf:'center'
+    },
+    listStyle:{
+        borderColor:'#ff9800',
+        borderWidth:1,
+        borderStyle:'solid',
+        borderRadius:5,
+        padding:5,
+        margin:3
+    },
+    similarList:{
+        fontSize: 16,
+        color: '#133',
+        textAlign:'center'
     }
 });
