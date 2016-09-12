@@ -16,7 +16,7 @@ export default class allArtistsComponent extends Component {
     };
 
     /*function to display name of selected artist*/
-     sayMyName(text){
+     pushArtist(text){
         this.props.navigator.push({
             title:text
         });
@@ -60,7 +60,7 @@ export default class allArtistsComponent extends Component {
                 <ListView
                 dataSource={this.state.dataSource}
                 renderRow={(rowData) =>
-              <TouchableHighlight onPress={()=>this.sayMyName(rowData.name)}>
+              <TouchableHighlight onPress={()=>this.pushArtist(rowData.name)}>
                <Text style={styles.singleList}>{rowData.name}</Text>
               </TouchableHighlight>
                }

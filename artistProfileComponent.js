@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Linking } from 'react-native';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
-import AllArtistsFunc from './allArtistsComponent';
+import ImageWindow from './imageViewComponent';
 
 export default class artistProfileComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
             artist_bio:'loading, wait...',
-            art_img:'',
+            art_img:'./images.png',
             similarOBJ:['']
         };
         this.getArtistInfo();
     }
 
+    /*get selected artist info-bio*/
     getArtistInfo(){
         var artistName = encodeURIComponent(this.props.name);
         fetch('http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist='+artistName+'&api_key=57ee3318536b23ee81d6b27e36997cde&format=json').
@@ -35,15 +36,22 @@ export default class artistProfileComponent extends Component {
             });
     };
 
+    /*return to previous scene*/
     goHome(){
         this.props.navigator.pop();
     };
+
+    /*open next scene*/
     fetchArt(artVal){
         this.props.navigator.push({
             title:artVal
         });
-        console.log(artVal);
     };
+
+    alertMe(img_uri){
+        var img = new ImageWindow();
+        img.setModalVisible(true);
+    }
 
     render() {
         let artist_clip = {
@@ -77,12 +85,16 @@ export default class artistProfileComponent extends Component {
               <ScrollView style={{backgroundColor:'#ddd'}}>
                   <View style={styles.profileCard}>
                       <View style={styles.profileCardInner}>
-                          <Image
-                              source={artist_clip}
-                              indicator={ProgressBar}
-                              indicatorProps={{color: '#133'}}
-                              style={styles.imageHolder}
-                          />
+                          <TouchableHighlight onPress = {()=>this.alertMe(artist_clip.uri)}>
+                              <Image
+                                  source={artist_clip}
+                                  indicator={ProgressBar}
+                                  indicatorProps={{color: '#133'}}
+
+                                  style={styles.imageHolder}
+                              />
+                          </TouchableHighlight>
+
                           <Text style={styles.imgTitle}>{this.props.name}</Text>
                           <View style={styles.profileParaContainer}>
                               {bio_area}
@@ -106,6 +118,7 @@ export default class artistProfileComponent extends Component {
                   </View>
               </ScrollView>
               {/*<Text style={styles.anchors} onPress={() => Linking.openURL('http://www.theriket.com/#/')}>Powered By TheRiket</Text>*/}
+              <ImageWindow></ImageWindow>
           </View>
         )
 
