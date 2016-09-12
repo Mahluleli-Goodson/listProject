@@ -10,7 +10,9 @@ export default class artistProfileComponent extends Component {
         this.state = {
             artist_bio:'loading, wait...',
             art_img:'./images.png',
-            similarOBJ:['']
+            similarOBJ:[''],
+            modalOpen:false,
+            imageSelect:''
         };
         this.getArtistInfo();
     }
@@ -48,12 +50,16 @@ export default class artistProfileComponent extends Component {
         });
     };
 
-    alertMe(img_uri){
-        var img = new ImageWindow();
-        img.setModalVisible(true);
+    showBigImg(img_uri){
+        this.setState({
+            modalOpen:!this.state.modalOpen,
+            imageSelect:{uri:img_uri}
+        });
     }
 
     render() {
+        /*console.log('someData',this.props.someData);*/
+
         let artist_clip = {
             uri:this.state.art_img
         };
@@ -85,7 +91,7 @@ export default class artistProfileComponent extends Component {
               <ScrollView style={{backgroundColor:'#ddd'}}>
                   <View style={styles.profileCard}>
                       <View style={styles.profileCardInner}>
-                          <TouchableHighlight onPress = {()=>this.alertMe(artist_clip.uri)}>
+                          <TouchableHighlight onPress = {()=>this.showBigImg(artist_clip.uri)}>
                               <Image
                                   source={artist_clip}
                                   indicator={ProgressBar}
@@ -118,7 +124,9 @@ export default class artistProfileComponent extends Component {
                   </View>
               </ScrollView>
               {/*<Text style={styles.anchors} onPress={() => Linking.openURL('http://www.theriket.com/#/')}>Powered By TheRiket</Text>*/}
-              <ImageWindow></ImageWindow>
+
+              {this.state.modalOpen==true?<ImageWindow modalStatus={this.state.modalOpen} imageEnlarge={this.state.imageSelect} onChange={this.onChange}/>:null}
+              {/*console.log(this.onChange)*/}
           </View>
         )
 
