@@ -29,7 +29,7 @@ export default class imageViewComponent extends Component {
                     visible={this.state.modalVisible}
                     onRequestClose={() => {console.log('closed image view')}}
                 >
-                    <View style={{backgroundColor:'rgba(0,0,0,0.8)',flex:1}}>
+                    <View style={{backgroundColor:'rgba(59,0,106,0.4)',flex:1}}>
                         <View style={styles.closeModalContainer}>
                                 <TouchableHighlight onPress={() => {this.setModalVisible(!this.state.modalVisible)}} style={styles.closeModalBtn}>
                                     <Text style={{/*marginTop: 20,fontSize:18,*/textAlign:'center',color:'#ccc'}}>close</Text>
@@ -59,7 +59,7 @@ var styles = StyleSheet.create({
         marginTop:22
     },
     closeModalContainer:{
-        backgroundColor:'rgba(0,0,0,0.3)',
+        backgroundColor:'rgba(0,0,0,0.5)',
         height:50,
         flexDirection:'column',
         alignItems:'flex-end'

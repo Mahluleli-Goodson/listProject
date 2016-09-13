@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,TouchableOpacity } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,TouchableOpacity,DrawerLayoutAndroid,StatusBar } from 'react-native';
 import Image from 'react-native-image-progress';
 
 export default class allArtistsComponent extends Component {
@@ -11,17 +11,22 @@ export default class allArtistsComponent extends Component {
             title:this.props.title,/*or use props.title ---still in same scope*/
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows([''])
         };
-
         this.loadArtists();
     };
 
-    /*function to display name of selected artist*/
+    /*function to push to navigator AND display name of selected artist*/
      pushArtist(text){
         this.props.navigator.push({
             title:text
         });
     };
     /*END function to display name of selected artist*/
+
+    /*open close drawer func*/
+        openDrawerFunc(){
+          this.refs['DRAWER-OP'].openDrawer();
+        };
+    /*ENDopen close drawer func*/
 
     /*function to fetch artists*/
     loadArtists(){
@@ -69,11 +74,39 @@ export default class allArtistsComponent extends Component {
             />;
         }
 
-        return (
-            <View style={{flex:1, backgroundColor:'#eee'}}>
-                <ToolbarAndroid style={styles.toolBar}><Text style={{color:'#fff'}}>{this.state.title}</Text></ToolbarAndroid>
-                    {artist_list_area}
+        //drawer menu components
+        var navigationView = (
+            <View style={{flex: 1, backgroundColor: 'rgba(59,0,106,0.4)'}}>
+                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>I'm in the Drawer!</Text>
             </View>
+        );
+
+        let statusBar =
+            <StatusBar
+                backgroundColor="#bc0d76"
+                barStyle="light-content"
+            />;
+
+        let innerContent =
+            <View style={{flex:1, backgroundColor:'#eee'}}>
+                {statusBar}
+                <View style={styles.toolBar}>
+                    <TouchableOpacity onPress={()=>this.openDrawerFunc()} style={{width:20,height:20,left:-5}}>
+                        <Image source={require("./drawerImg.png")} style={{width:20,height:20}}/>
+                    </TouchableOpacity>
+                    <View style={{}}><Text style={{color:'#fff'}}> {this.state.title}</Text></View>
+                </View>
+                {artist_list_area}
+            </View>;
+
+        return (
+            <DrawerLayoutAndroid
+                ref={'DRAWER-OP'}
+                drawerWidth={300}
+                drawerPosition={DrawerLayoutAndroid.positions.Left}
+                renderNavigationView={() => navigationView}>
+                {innerContent}
+            </DrawerLayoutAndroid>
         );
     }
 }
@@ -86,7 +119,6 @@ const styles = StyleSheet.create({
         padding:10,
         flex:1,
         flexDirection:'row',
-        alignItems:'center',
         backgroundColor:'#fff',
         /*borderStyle:'solid',
         borderBottomColor:'#ccc',
@@ -95,8 +127,8 @@ const styles = StyleSheet.create({
     thumbnailHolder:{
         width:50,
         height:50,
-        backgroundColor:'#ccc',
-        borderColor:'#ff9800',
+        backgroundColor:'#5B2980',
+        borderColor:'#D9429F',
         borderWidth:0.5
     },
     singleListTxt:{
@@ -107,8 +139,9 @@ const styles = StyleSheet.create({
     },
     toolBar:{
         padding:15,
-        backgroundColor:'#133',
+        backgroundColor:'#D9429F',
         elevation:5,
+        flexDirection:'row'
         /*marginBottom:15*/
     },
     outputText:{

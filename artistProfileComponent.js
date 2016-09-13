@@ -109,7 +109,7 @@ export default class artistProfileComponent extends Component {
 
         return (
           <View style={styles.container}>
-              <View style={{padding:7,backgroundColor:'#133',elevation:5,flexDirection: 'row',justifyContent: 'space-between'}}>
+              <View style={{padding:7,backgroundColor:'#D9429F',elevation:5,flexDirection: 'row',justifyContent: 'space-between'}}>
 
                   <View>
                       <Text style={styles.titleTxt}>{this.props.name}</Text>
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
 
     },
     titleTxt:{
-        color:'#ff9800',
+        color:'#F0D32D',
         paddingLeft:5,
         paddingBottom:5,
         fontSize:22
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
         height: 200,
         alignSelf:'center',
         borderRadius:100,
-        borderColor:'#ff9800',
+        borderColor:'#F0D32D',
         borderWidth:5
     },
     imgTitle:{
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     listStyle:{
-        borderColor:'#ff9800',
+        borderColor:'#D9429F',
         borderWidth:1,
         borderStyle:'solid',
         borderRadius:5,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     },
     similarList:{
         fontSize: 16,
-        color: '#133',
+        color: '#3B006A',
         textAlign:'center'
     }
 });
