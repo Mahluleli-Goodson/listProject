@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Linking } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,Navigator,ScrollView,Linking,TouchableOpacity } from 'react-native';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
 import ImageWindow from './imageViewComponent';
@@ -30,8 +30,6 @@ export default class artistProfileComponent extends Component {
                 art_img:respObj.artist.image[4]["#text"],
                 similarOBJ:respObj.artist.similar.artist
             });
-            console.log(respObj);
-            /*console.log('similar',respObj.artist.similar.artist);*/
             }.bind(this)).
             catch(function (error) {
             console.error(error);
@@ -58,18 +56,55 @@ export default class artistProfileComponent extends Component {
     }
 
     render() {
-        /*console.log('someData',this.props.someData);*/
 
         let artist_clip = {
             uri:this.state.art_img
         };
-        let bio_area='';//initialise bio-content variable
+        let main_content='';//initialise bio-content variable
 
         //show gif loader while content-bio is still loading
         if(this.state.artist_bio=='loading, wait...'){
-             bio_area= <Image source={require("./ripple.gif")} style={styles.gifLoader}/>;
+             main_content=
+                 <View style={styles.gifLoader}>
+                    <Image source={require("./ripple.gif")}/>
+                </View>;
         }else{
-            bio_area = <Text style={styles.profilePara}>{this.state.artist_bio}</Text>
+            main_content =
+                <ScrollView style={{backgroundColor:'#ddd'}}>
+                    <View style={styles.profileCard}>
+                        <View style={styles.profileCardInner}>
+                            <TouchableOpacity onPress = {()=>this.showBigImg(artist_clip.uri)} activeOpacity={0.5}>
+                                <Image
+                                    source={artist_clip}
+                                    indicator={ProgressBar}
+                                    indicatorProps={{color: '#133'}}
+
+                                    style={styles.imageHolder}
+                                />
+                            </TouchableOpacity>
+
+                            <Text style={styles.imgTitle}>{this.props.name}</Text>
+                            <View style={styles.profileParaContainer}>
+                                <Text style={styles.profilePara}>{this.state.artist_bio}</Text>
+                            </View>
+                            <View>
+                                <Text style={{fontSize:17}}>Similar Artists:</Text>
+                                <View>
+                                    {
+                                        this.state.similarOBJ.map(function (similar_art,index) {
+                                            return(
+                                                <TouchableHighlight onPress={()=>this.fetchArt(similar_art.name)} key={index} style={styles.listStyle}>
+                                                    <Text style={styles.similarList}>{similar_art.name}</Text>
+                                                </TouchableHighlight>
+                                            ) ;
+
+                                        }.bind(this))
+                                    }
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </ScrollView>;
         }
 
         return (
@@ -88,45 +123,12 @@ export default class artistProfileComponent extends Component {
               </View>{/*end of top toolbar*/}
 
               {/*main view section*/}
-              <ScrollView style={{backgroundColor:'#ddd'}}>
-                  <View style={styles.profileCard}>
-                      <View style={styles.profileCardInner}>
-                          <TouchableHighlight onPress = {()=>this.showBigImg(artist_clip.uri)}>
-                              <Image
-                                  source={artist_clip}
-                                  indicator={ProgressBar}
-                                  indicatorProps={{color: '#133'}}
+              {main_content}
 
-                                  style={styles.imageHolder}
-                              />
-                          </TouchableHighlight>
-
-                          <Text style={styles.imgTitle}>{this.props.name}</Text>
-                          <View style={styles.profileParaContainer}>
-                              {bio_area}
-                          </View>
-                          <View>
-                              <Text style={{fontSize:17}}>Similar Artists:</Text>
-                              <View>
-                                  {
-                                      this.state.similarOBJ.map(function (similar_art,index) {
-                                         return(
-                                             <TouchableHighlight onPress={()=>this.fetchArt(similar_art.name)} key={index} style={styles.listStyle}>
-                                                 <Text style={styles.similarList}>{similar_art.name}</Text>
-                                             </TouchableHighlight>
-                                         ) ;
-
-                                      }.bind(this))
-                                  }
-                              </View>
-                          </View>
-                      </View>
-                  </View>
-              </ScrollView>
               {/*<Text style={styles.anchors} onPress={() => Linking.openURL('http://www.theriket.com/#/')}>Powered By TheRiket</Text>*/}
 
-              {this.state.modalOpen==true?<ImageWindow modalStatus={this.state.modalOpen} imageEnlarge={this.state.imageSelect} onChange={this.onChange}/>:null}
-              {/*console.log(this.onChange)*/}
+              {this.state.modalOpen==true?<ImageWindow modalStatus={this.state.modalOpen} imageEnlarge={this.state.imageSelect}/>:null}
+
           </View>
         )
 
@@ -140,7 +142,6 @@ const styles = StyleSheet.create({
         height:null
     },
     doneBtn:{
-        /*backgroundColor:'red',*/
         paddingTop:8
     },
     doneTxt:{
@@ -163,7 +164,6 @@ const styles = StyleSheet.create({
         borderRadius:100,
         borderColor:'#ff9800',
         borderWidth:5
-        /*marginTop:30*/
     },
     imgTitle:{
         alignSelf:'center',
@@ -184,15 +184,14 @@ const styles = StyleSheet.create({
     },
     profileParaContainer:{
         borderTopColor:'#133',
-        borderTopWidth:1,
+        borderTopWidth:0.3,
         borderBottomColor:'#133',
-        borderBottomWidth:1,
+        borderBottomWidth:0.3,
         borderStyle:'solid',
         paddingTop:10,
         marginBottom:10
     },
     profilePara:{
-        /*backgroundColor:'#ff4',*/
         textAlign:'justify',
         fontSize:17,
         lineHeight:25,
@@ -205,9 +204,9 @@ const styles = StyleSheet.create({
         bottom:0
     },
     gifLoader:{
-        width:40,
-        height:40,
-        alignSelf:'center'
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     listStyle:{
         borderColor:'#ff9800',

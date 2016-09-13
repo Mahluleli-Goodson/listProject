@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight } from 'react-native';
+import { AppRegistry, ListView, Text, View,StyleSheet,ToolbarAndroid,TouchableHighlight,TouchableOpacity } from 'react-native';
 import Image from 'react-native-image-progress';
 
 export default class allArtistsComponent extends Component {
@@ -40,8 +40,6 @@ export default class allArtistsComponent extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-        /*var customData = require('./students.json'); //require local JSON
-         console.log(customData);*/
     };
     /*END function to fetch artists*/
 
@@ -60,10 +58,14 @@ export default class allArtistsComponent extends Component {
                 <ListView
                 dataSource={this.state.dataSource}
                 renderRow={(rowData) =>
-              <TouchableHighlight onPress={()=>this.pushArtist(rowData.name)}>
-               <Text style={styles.singleList}>{rowData.name}</Text>
-              </TouchableHighlight>
+                    <View style={styles.singleListContainer}>
+                            <Image source={{uri:rowData.image[2]["#text"]}} style={styles.thumbnailHolder}/>
+                        <TouchableOpacity onPress={()=>this.pushArtist(rowData.name)} style={{flex:1}} activeOpacity={0.5}>
+                           <Text style={styles.singleListTxt}>{rowData.name}</Text>
+                        </TouchableOpacity>
+                    </View>
                }
+                style={{paddingTop:5}}
             />;
         }
 
@@ -77,18 +79,37 @@ export default class allArtistsComponent extends Component {
 }
 
 const styles = StyleSheet.create({
-    singleList:{
-        backgroundColor:'#ff9800',
-        textAlign:'center',
-        marginTop:2,
+    singleListContainer:{
+        marginLeft:5,
+        marginRight:5,
+        marginBottom:3,
         padding:10,
-        fontSize:20,
-        elevation:2
+        flex:1,
+        flexDirection:'row',
+        alignItems:'center',
+        backgroundColor:'#fff',
+        /*borderStyle:'solid',
+        borderBottomColor:'#ccc',
+        borderBottomWidth:0.5,*/
+    },
+    thumbnailHolder:{
+        width:50,
+        height:50,
+        backgroundColor:'#ccc',
+        borderColor:'#ff9800',
+        borderWidth:0.5
+    },
+    singleListTxt:{
+        /*textAlign:'center',*/
+        /*backgroundColor:'#234',*/
+        fontSize:18,
+        left:10
     },
     toolBar:{
         padding:15,
         backgroundColor:'#133',
-        elevation:5
+        elevation:5,
+        /*marginBottom:15*/
     },
     outputText:{
         padding:6,
